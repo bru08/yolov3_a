@@ -6,6 +6,7 @@ import shutil
 import time
 from pathlib import Path
 from threading import Thread
+import re
 
 import cv2
 import numpy as np
@@ -288,9 +289,7 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
         self.rect = False if image_weights else rect
         self.mosaic = self.augment and not self.rect  # load 4 images at a time into a mosaic (only during training)
 
-        # Define labels
-        self.label_files = [x.replace('images', 'labels').replace(os.path.splitext(x)[-1], '.txt')
-                            for x in self.img_files]
+        self.label_files = [re.sub(".png", ".txt" , x) for x in self.img_files]
 
         # Read image shapes (wh)
         sp = path.replace('.txt', '') + '.shapes'  # shapefile path
